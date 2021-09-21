@@ -31,7 +31,13 @@ def login(username, password):
         write_log("r = requests.get('http://www.baidu.com') failed!")
         return
     url = r.text.split('\'')[1]
-    login = requests.get(url, headers=first_header)
+
+    try:
+        login = requests.get(url, headers=first_header)
+    except:
+        write_log("login = requests.get(url, headers=first_header) failed!")
+        return
+
     attrlist = login.url.split('?')[-1].split('&')
     for i in range(0, len(attrlist)):
         key = attrlist[i].split('=')[0]
