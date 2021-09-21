@@ -27,11 +27,16 @@ def login(username, password):
         # print(r.headers)
         # print(r.request.headers)
     except:
-        # print("r = requests.get('http://www.baidu.com') failed!")
+        print("r = requests.get('http://www.baidu.com') failed!")
         write_log("r = requests.get('http://www.baidu.com') failed!")
         return
     url = r.text.split('\'')[1]
-    login = requests.get(url, headers=first_header)
+    try:
+        login = requests.get(url, headers=first_header)
+    except:
+        print("login = requests.get(url, headers=first_header) failed!")
+        write_log("login = requests.get(url, headers=first_header) failed!")
+        return
     attrlist = login.url.split('?')[-1].split('&')
     for i in range(0, len(attrlist)):
         key = attrlist[i].split('=')[0]
@@ -68,18 +73,19 @@ def login(username, password):
     try:
         do = requests.post(loginurl, data=data, headers=header)
     except:
-        print('login failed!')
+        print("do = requests.post(loginurl, data=data, headers=header) failed!")
         return
     datas = json.loads(do.text)
     if datas['result'] == 'success':
-        # print('login success!')
+        print('login success!')
         write_log('login success!')
     elif datas['result'] == 'online':
-        # print(datas['message'])
+        print(datas['message'])
         write_log(datas['message'])
     else:
-        # print(datas['message'])
+        print(datas['message'])
         write_log(datas['message'])
+    return
 
 
 def write_log(log_txt):
@@ -94,6 +100,7 @@ def readconfig():
     configfile = os.path.join(corrent_dir, 'config.ini')
     config = configparser.ConfigParser()
     if not os.path.exists(configfile):
+        print('No configuration file, creating!')
         write_log('No configuration file, creating!')
         createconfig(configfile)
 
@@ -128,11 +135,12 @@ if __name__ == '__main__':
     else:
         netok = run(["ping -c 3 www.baidu.com"], stdout=PIPE, stderr=PIPE, stdin=PIPE, shell=True)
     if netok.returncode == 0:
-        # print('network connect ok!')
+        print('network connect ok!')
         write_log('Network connect is ok!')
     elif username == '' or password == '':
         write_log('No username or password!')
-        # print('no network!')
+        print('no network!')
     else:
+        print('No network, connecting!')
         write_log('No network, connecting!')
         login(username, password)
