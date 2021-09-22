@@ -28,14 +28,16 @@ def login(username, password):
         # print(r.request.headers)
     except:
         print("r = requests.get('http://www.baidu.com') failed!")
-        write_log("r = requests.get('http://www.baidu.com') failed!")
+        write_err_log('\n' + time.asctime())
+        write_err_log("r = requests.get('http://www.baidu.com') failed!")
         return
     url = r.text.split('\'')[1]
     try:
         login = requests.get(url, headers=first_header)
     except:
         print("login = requests.get(url, headers=first_header) failed!")
-        write_log("login = requests.get(url, headers=first_header) failed!")
+        write_err_log('\n' + time.asctime())
+        write_err_log("login = requests.get(url, headers=first_header) failed!")
         return
     attrlist = login.url.split('?')[-1].split('&')
     for i in range(0, len(attrlist)):
@@ -74,6 +76,8 @@ def login(username, password):
         do = requests.post(loginurl, data=data, headers=header)
     except:
         print("do = requests.post(loginurl, data=data, headers=header) failed!")
+        write_err_log('\n' + time.asctime())
+        write_err_log("do = requests.post(loginurl, data=data, headers=header) failed!")
         return
     datas = json.loads(do.text)
     if datas['result'] == 'success':
@@ -90,7 +94,14 @@ def login(username, password):
 
 def write_log(log_txt):
     corrent_dir = os.path.dirname(os.path.realpath(sys.argv[0])) + os.sep
-    logfile = os.path.join(corrent_dir, 'login.txt')
+    logfile = os.path.join(corrent_dir, 'log.txt')
+    with open(logfile, 'a') as f:
+        f.write(log_txt + '\n')
+
+
+def write_err_log(log_txt):
+    corrent_dir = os.path.dirname(os.path.realpath(sys.argv[0])) + os.sep
+    logfile = os.path.join(corrent_dir, 'log_err.txt')
     with open(logfile, 'a') as f:
         f.write(log_txt + '\n')
 
@@ -139,7 +150,7 @@ if __name__ == '__main__':
         write_log('Network connect is ok!')
     elif username == '' or password == '':
         write_log('No username or password!')
-        print('no network!')
+        print('No username or password!')
     else:
         print('No network, connecting!')
         write_log('No network, connecting!')
