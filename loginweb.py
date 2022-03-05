@@ -5,7 +5,9 @@ import os
 import platform
 import sys
 import time
+import urllib
 from subprocess import run, PIPE
+from urllib.request import urlopen
 
 import requests
 
@@ -88,10 +90,10 @@ def login(username, password):
         write_log(datas['message'])
 
 
-def write_log(log_txt):
+def write_log(log_txt=''):
     corrent_dir = os.path.dirname(os.path.realpath(sys.argv[0])) + os.sep
     logfile = os.path.join(corrent_dir, 'login.txt')
-    with open(logfile, 'a') as f:
+    with open(logfile, 'a', encoding='utf-8') as f:
         f.write(log_txt + '\n')
 
 
@@ -121,24 +123,34 @@ def createconfig(configfile):
     config.write(open(configfile, 'w'))
 
 
+def is_internet():
+    """
+    Query internet using python
+    :return:
+    """
+    try:
+        urlopen('https://www.baidu.com', timeout=1)
+        return True
+    except urllib.error.URLError as Error:
+        print(Error)
+        return False
+
+
 if __name__ == '__main__':
     # parser = argparse.ArgumentParser()
     # parser.add_argument('--username', type=str, default=None)
     # parser.add_argument('--password', type=str, default=None)
     # opt = parser.parse_args()
 
-    write_log('\n' + time.asctime())
+    write_log(time.asctime())
     username, password = readconfig()
-    if platform.system() == 'Windows':
-        netok = run(["ping www.baidu.com"], stdout=PIPE, stderr=PIPE, stdin=PIPE, shell=True)
-    else:
-        netok = run(["ping -c 3 www.baidu.com"], stdout=PIPE, stderr=PIPE, stdin=PIPE, shell=True)
-    if netok.returncode == 0:
+    if is_internet():
         # print('network connect ok!')
-        write_log('Network connect is ok!')
+        write_log('Network connection is ok!')
     elif username == '' or password == '':
         write_log('No username or password!')
         # print('no network!')
     else:
         write_log('No network, connecting!')
         login(username, password)
+    write_log()
