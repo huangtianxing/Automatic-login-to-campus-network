@@ -68,6 +68,7 @@ class gui:
             return False
 
     def connect(self):
+        self.changeconfig()
         if self.is_internet():
             self.message.set('Network connection is ok!')
         elif self.username.get() == '' or self.password.get() == '':
