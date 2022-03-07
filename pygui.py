@@ -41,8 +41,8 @@ class gui:
         config.set('user', 'username', '')
         config.set('user', 'password', '')
         config.add_section("config")
-        config.set('config', 'saveuser', '')
-        config.set('config', 'autologin', '')
+        config.set('config', 'saveuser', 'false')
+        config.set('config', 'autologin', 'false')
         config.write(open(self.configfile, 'w'))
 
     def is_internet(self):
@@ -85,14 +85,14 @@ class gui:
             # print(r.request.headers)
         except:
             # print("r = requests.get('http://www.baidu.com') failed!")
-            self.message.set("r = requests.get('http://www.baidu.com') failed!")
+            self.message.set("request www.baidu.com failed!")
             return
         url = r.text.split('\'')[1]
 
         try:
             login = requests.get(url, headers=first_header)
         except:
-            self.message.set("login = requests.get(url, headers=first_header) failed!")
+            self.message.set("request access page failed!")
             return
 
         attrlist = login.url.split('?')[-1].split('&')
@@ -186,7 +186,7 @@ class gui:
         frame5 = Frame(frame4, width=280, height=44, borderwidth=1, relief='solid')
         frame5.place(x=0, y=0)
         canvas3 = Canvas(frame5, width=42, height=38)
-        canvas3.loginimg3 = PhotoImage(file='Images/loginimg.png')
+        canvas3.loginimg3 = PhotoImage(file='Images/username.gif')
 
         image3 = canvas3.create_image(21, 0, anchor='n', image=canvas3.loginimg3)
         canvas3.place(x=0, y=0)
@@ -197,7 +197,7 @@ class gui:
         frame6 = Frame(frame4, width=280, height=44, borderwidth=1, relief='solid', highlightcolor='#00ffff')
         frame6.place(x=0, y=46)
         canvas4 = Canvas(frame6, width=42, height=38)
-        canvas4.loginimg4 = PhotoImage(file='Images/loginimg.png')
+        canvas4.loginimg4 = PhotoImage(file='Images/password.gif')
 
         image4 = canvas4.create_image(21, 0, anchor='n', image=canvas4.loginimg4)
         canvas4.place(x=0, y=0)
