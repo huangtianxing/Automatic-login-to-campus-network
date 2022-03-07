@@ -19,10 +19,21 @@ class gui:
         self.autologin = StringVar()
         corrent_dir = os.path.dirname(os.path.realpath(sys.argv[0])) + os.sep
         self.configfile = os.path.join(corrent_dir, 'config.ini')
+        self.qrpath = self.resource_path('Images\\qrcode.gif')
+        self.accesspath = self.resource_path('Images\\accesslogo.png')
+        self.userlogopath = self.resource_path('Images\\username.gif')
+        self.passwordlogopath = self.resource_path('Images\\password.gif')
         self.readconfig()
         self.createpage()
         if self.autologin.get() == 'true':
             self.connect()
+
+    def resource_path(self, relative_path):
+        if getattr(sys, 'frozen', False):  # 是否Bundle Resource
+            base_path = sys._MEIPASS
+        else:
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
 
     def readconfig(self):
         config = configparser.ConfigParser()
@@ -143,6 +154,7 @@ class gui:
         else:
             # print(datas['message'])
             self.message.set(datas['message'])
+
     def changeconfig(self):
         config = configparser.ConfigParser()
         config.read(self.configfile, encoding="utf-8")
@@ -155,6 +167,7 @@ class gui:
         config.set('config', 'saveuser', self.saveuser.get())
         config.set('config', 'autologin', self.autologin.get())
         config.write(open(self.configfile, 'w'))
+
     def createpage(self):
         frame = Frame(self.mywindows, width=320, height=380, pady=20, padx=20)
         frame.place(x=0, y=0)
@@ -166,12 +179,12 @@ class gui:
         frame2.place(x=36, y=0)
 
         canvas1 = Canvas(self.mywindows, width=25, height=25)
-        canvas1.image_file1 = PhotoImage(file='Images/qrcode.gif')
+        canvas1.image_file1 = PhotoImage(file=self.qrpath)
         image1 = canvas1.create_image(15, 0, anchor='n', image=canvas1.image_file1)
         canvas1.place(x=285, y=10)
 
         canvas2 = Canvas(frame2, width=208, height=49)
-        canvas2.image_file2 = PhotoImage(file='Images/校园网认证登录.png')
+        canvas2.image_file2 = PhotoImage(file=self.accesspath)
         image2 = canvas2.create_image(104, 0, anchor='n', image=canvas2.image_file2)
         canvas2.place(x=0, y=0)
 
@@ -186,7 +199,7 @@ class gui:
         frame5 = Frame(frame4, width=280, height=44, borderwidth=1, relief='solid')
         frame5.place(x=0, y=0)
         canvas3 = Canvas(frame5, width=42, height=38)
-        canvas3.loginimg3 = PhotoImage(file='Images/username.gif')
+        canvas3.loginimg3 = PhotoImage(file=self.userlogopath)
 
         image3 = canvas3.create_image(21, 0, anchor='n', image=canvas3.loginimg3)
         canvas3.place(x=0, y=0)
@@ -197,7 +210,7 @@ class gui:
         frame6 = Frame(frame4, width=280, height=44, borderwidth=1, relief='solid', highlightcolor='#00ffff')
         frame6.place(x=0, y=46)
         canvas4 = Canvas(frame6, width=42, height=38)
-        canvas4.loginimg4 = PhotoImage(file='Images/password.gif')
+        canvas4.loginimg4 = PhotoImage(file=self.passwordlogopath)
 
         image4 = canvas4.create_image(21, 0, anchor='n', image=canvas4.loginimg4)
         canvas4.place(x=0, y=0)
