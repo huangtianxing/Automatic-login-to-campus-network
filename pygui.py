@@ -243,8 +243,13 @@ class gui:
 
 if __name__ == '__main__':
     root = Tk()
+    width = 320
+    height = 380
     root.title('connect compus network')
-    root.geometry('320x380')
+    screenwidth = root.winfo_screenwidth()
+    screenheight = root.winfo_screenheight()
+    size_geo = '%dx%d+%d+%d' % (width, height, (screenwidth - width) / 2, (screenheight - height) / 2)
+    root.geometry(size_geo)
     root.resizable(0, 0)
     gui(root)
     root.mainloop()
