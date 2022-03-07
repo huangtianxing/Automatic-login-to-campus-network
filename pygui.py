@@ -1,6 +1,7 @@
 import configparser
 import json
 import os
+import socket
 import sys
 import urllib
 from tkinter import *
@@ -56,6 +57,13 @@ class gui:
         config.set('config', 'autologin', 'false')
         config.write(open(self.configfile, 'w'))
 
+    def checkInternetSocket(self, host="114.114.114.114", port=53, timeout=1):
+        try:
+            socket.setdefaulttimeout(timeout)
+            socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+            return True
+        except socket.error as ex:
+            return False
     def is_internet(self):
         """
         Query internet using python
@@ -69,7 +77,7 @@ class gui:
 
     def connect(self):
         self.changeconfig()
-        if self.is_internet():
+        if self.checkInternetSocket():
             self.message.set('Network connection is ok!')
         elif self.username.get() == '' or self.password.get() == '':
             self.message.set('No username or password!')
