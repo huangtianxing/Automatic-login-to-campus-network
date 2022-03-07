@@ -23,6 +23,8 @@ class gui:
         self.mywindowsicon = self.resource_path('Images\\networkicon64.ico')
         self.readconfig()
         self.mywindows.iconbitmap(self.mywindowsicon)
+        # self.mywindows.configure(bg='#9130F1')
+        self.mywindows.attributes("-alpha",0.9)
         self.createpage()
         if self.autologin.get() == 'true':
             self.connect()
