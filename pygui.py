@@ -2,11 +2,7 @@ import configparser
 import json
 import os
 import socket
-import sys
-import urllib
 from tkinter import *
-from urllib.request import urlopen
-
 import requests
 
 
@@ -24,7 +20,9 @@ class gui:
         self.accesspath = self.resource_path('Images\\accesslogo.png')
         self.userlogopath = self.resource_path('Images\\username.gif')
         self.passwordlogopath = self.resource_path('Images\\password.gif')
+        self.mywindowsicon = self.resource_path('Images\\networkicon64.ico')
         self.readconfig()
+        self.mywindows.iconbitmap(self.mywindowsicon)
         self.createpage()
         if self.autologin.get() == 'true':
             self.connect()
@@ -64,16 +62,16 @@ class gui:
             return True
         except socket.error as ex:
             return False
-    def is_internet(self):
-        """
-        Query internet using python
-        :return:
-        """
-        try:
-            urlopen('https://www.baidu.com', timeout=1)
-            return True
-        except urllib.error.URLError as Error:
-            return False
+    # def is_internet(self):
+    #     """
+    #     Query internet using python
+    #     :return:
+    #     """
+    #     try:
+    #         urlopen('https://www.baidu.com', timeout=1)
+    #         return True
+    #     except urllib.error.URLError as Error:
+    #         return False
 
     def connect(self):
         self.changeconfig()
